@@ -121,7 +121,7 @@ export default class extends Component<any, any> {
   pickColor = (color: Object) => {
     const { rows, selectedRow, selectedCol } = this.state;
 
-    const { i, j, k, a, asset } = rows[selectedRow];
+    const { i, j, k, a, asset, key } = rows[selectedRow];
 
     const newColor = color.hex;
 
@@ -134,22 +134,48 @@ export default class extends Component<any, any> {
     const { r, g, b } = hexToRgb(newColor);
 
     if (asset === -1) {
-      if (newJson && newJson.layers)
-        newJson.layers[i].shapes[j].it[k].c.k = [
-          toUnitVector(r),
-          toUnitVector(g),
-          toUnitVector(b),
-          a
-        ];
+      if (newJson && newJson.layers) {
+        if (newJson.layers[i].shapes[j].it[k].c.k.length === 4) {
+          newJson.layers[i].shapes[j].it[k].c.k = [
+            toUnitVector(r),
+            toUnitVector(g),
+            toUnitVector(b),
+            a
+          ];
+        } else {
+          newJson.layers[i].shapes[j].it[k].c.k[0][key] = [
+            toUnitVector(r),
+            toUnitVector(g),
+            toUnitVector(b),
+            a
+          ];
+        }
+      }
     } else {
       // eslint-disable-next-line
-      if (newJson && newJson.assets)
-        newJson.assets[asset].layers[i].shapes[j].it[k].c.k = [
-          toUnitVector(r),
-          toUnitVector(g),
-          toUnitVector(b),
-          a
-        ];
+      if (newJson && newJson.assets) {
+        if (newJson.assets[asset].layers[i].shapes[j].it[k].c.k.length === 4) {
+          newJson.assets[asset].layers[i].shapes[j].it[k].c.k = [
+            toUnitVector(r),
+            toUnitVector(g),
+            toUnitVector(b),
+            a
+          ];
+        } else {
+          newJson.assets[asset].layers[i].shapes[j].it[k].c.k.s = [
+            toUnitVector(r),
+            toUnitVector(g),
+            toUnitVector(b),
+            a
+          ];
+          newJson.assets[asset].layers[i].shapes[j].it[k].c.k.e = [
+            toUnitVector(r),
+            toUnitVector(g),
+            toUnitVector(b),
+            a
+          ];
+        }
+      }
     }
 
     this.setState({ json: JSON.stringify(newJson) });

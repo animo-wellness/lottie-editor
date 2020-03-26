@@ -25,29 +25,82 @@ export const getColors = (tree: Object, cb: Function, asset: number = -1) => {
           if (shape.it)
             shape.it.forEach((prop, k) => {
               if (['fl', 'st'].includes(prop.ty)) {
-                const color = prop.c.k;
+                if (prop.c.k.length === 4) {
+                  const color = prop.c.k;
 
-                // eslint-disable-next-line
-                let [r, g, b, a] = color;
+                  // eslint-disable-next-line
+                  let [r, g, b, a] = color;
 
-                r = fromUnitVector(r);
-                g = fromUnitVector(g);
-                b = fromUnitVector(b);
+                  r = fromUnitVector(r);
+                  g = fromUnitVector(g);
+                  b = fromUnitVector(b);
 
-                const meta = {
-                  i,
-                  j,
-                  k,
-                  r,
-                  g,
-                  b,
-                  a,
-                  nm: prop.nm,
-                  asset,
-                  color: rgbToHex(r, g, b)
-                };
+                  const meta = {
+                    i,
+                    j,
+                    k,
+                    r,
+                    g,
+                    b,
+                    a,
+                    nm: prop.nm,
+                    asset,
+                    color: rgbToHex(r, g, b),
+                    key: false
+                  };
 
-                if (cb) cb(meta);
+                  if (cb) cb(meta);
+                // animated
+                } else {
+                  const color = prop.c.k[0].s;
+                  // eslint-disable-next-line
+                  let [r, g, b, a] = color;
+
+                  r = fromUnitVector(r);
+                  g = fromUnitVector(g);
+                  b = fromUnitVector(b);
+
+                  const meta = {
+                    i,
+                    j,
+                    k,
+                    r,
+                    g,
+                    b,
+                    a,
+                    nm: prop.nm,
+                    asset,
+                    color: rgbToHex(r, g, b),
+                    key: 's'
+                  };
+
+                  if (cb) cb(meta);
+
+
+                  const color2 = prop.c.k[0].e;
+                  // eslint-disable-next-line
+                  let [r2, g2, b2, a2] = color2;
+
+                  r2 = fromUnitVector(r2);
+                  g2 = fromUnitVector(g2);
+                  b2 = fromUnitVector(b2);
+
+                  const meta2 = {
+                    i,
+                    j,
+                    k,
+                    r2,
+                    g2,
+                    b2,
+                    a2,
+                    nm: prop.nm,
+                    asset,
+                    color: rgbToHex(r2, g2, b2),
+                    key: 'e'
+                  };
+
+                  if (cb) cb(meta2);
+                }
               }
             });
         });
